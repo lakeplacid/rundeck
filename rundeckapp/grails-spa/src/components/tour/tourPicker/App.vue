@@ -23,6 +23,11 @@
 import xhrRequestsHelper from '@/utilities/xhrRequests'
 import TourServices from '@/components/tour/services'
 
+import {RundeckBrowser} from 'ts-rundeck'
+
+const token = JSON.parse(document.getElementById('web_ui_token').textContent)
+const client = new RundeckBrowser(token.TOKEN, token.URI, 'http://ubuntu:4440')
+
 export default {
   name: 'TourPicker',
   props: ['eventBus'],
@@ -40,6 +45,14 @@ export default {
       xhrRequestsHelper.setFilterPref('activeTour', tour.key)
     },
     openTourSelectorModal: function () {
+      client.projectList().then( r => console.log(r._response))
+
+      client.projectList().then( r => {
+        r.forEach(p => {
+          console.log(p.name)
+        })
+      })
+
       if (this.tours.length) {
         this.tourSelectionModal = true
       } else {
